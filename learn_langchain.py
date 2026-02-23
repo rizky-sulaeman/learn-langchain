@@ -106,29 +106,29 @@ llm = ChatOpenAI(
     base_url="https://openrouter.ai/api/v1",
     model=getenv("MODEL"),
 )
-parser = JsonOutputParser()
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "Jelaskan tentang {topic} secara singkat. Jawab HANYA dengan 1 JSON object valid. {format_instructions}"),
-    ("ai", "Hi, saya adalah asisten AI yang akan membantu menjelaskan tentang {topic}. {input} {format_instructions}"),
-    ("human","{input}"),
-]).partial(format_instructions=parser.get_format_instructions())
+# parser = JsonOutputParser()
+# prompt = ChatPromptTemplate.from_messages([
+#     ("system", "Jelaskan tentang {topic} secara singkat. Jawab HANYA dengan 1 JSON object valid. {format_instructions}"),
+#     ("ai", "Hi, saya adalah asisten AI yang akan membantu menjelaskan tentang {topic}. {input} {format_instructions}"),
+#     ("human","{input}"),
+# ]).partial(format_instructions=parser.get_format_instructions())
 
-chain = prompt | llm | parser
+# chain = prompt | llm | parser
 
-result = chain.invoke({"topic": "Artificial Intelligence", "input": "jelaskan dengan Bahasa yang Sederhana"})
-filename = "output.json"
-try:
-    with open(filename, "r") as f:
-        data = json.load(f)
-    if not isinstance(data, list):
-        data = [data]
-except (FileNotFoundError, json.JSONDecodeError):
-    data = []
-data.append(result)
-with open(filename, "w") as f:
-    json.dump(data, f, indent=4)
-print(f"Hasil telah disimpan ke {filename}")
-print(result)
+# result = chain.invoke({"topic": "Artificial Intelligence", "input": "jelaskan dengan Bahasa yang Sederhana"})
+# filename = "output.json"
+# try:
+#     with open(filename, "r") as f:
+#         data = json.load(f)
+#     if not isinstance(data, list):
+#         data = [data]
+# except (FileNotFoundError, json.JSONDecodeError):
+#     data = []
+# data.append(result)
+# with open(filename, "w") as f:
+#     json.dump(data, f, indent=4)
+# print(f"Hasil telah disimpan ke {filename}")
+# print(result)
 
 
 
@@ -149,16 +149,73 @@ from typing import Any
 
 
 class Explanation(BaseModel):
-    jawaban: Any
-parserv10 = PydanticOutputParser(pydantic_object=Explanation)
-promptv10 = ChatPromptTemplate.from_messages([
+    jawaban: any
+# parserv10 = PydanticOutputParser(pydantic_object=Explanation)
+# promptv10 = ChatPromptTemplate.from_messages([
+#     ("system", "Jelaskan tentang {topic} secara singkat"),
+#     ("human", "{topic}"),
+#     ("ai", "Hi, saya adalah asisten AI yang akan membantu menjelaskan tentang {topic}. {input} {format_instructions}"),
+#     ("human","{input}"),
+# ]).partial(format_instructions=parserv10.get_format_instructions())
+
+# structured_chain = promptv10 | llm | parserv10
+# result = structured_chain.invoke({"topic": "Artificial Intelligence", "input": "jelaskan dengan Bahasa yang Sederhana"})
+# print(result.jawaban)
+# print(type(result.jawaban))
+
+print("="*100)
+
+"""
+Jsonoutputparser juga bisa di bind pydantic model ya, sama untuk yg menggungkan structure output coba kamu pelajari
+with_structured_output, itu base function nya untuk chatmodel, itu bisa ngebuat 
+ai ngeluarin object tanpa harus ada format instruction lagi
+
+code dibawah ini adalah contoh penggunaan with_structured_output untuk menghasilkan output tanpa harus menggunakan format instruction lagi.
+Dengan menggunakan with_structured_output, kita dapat langsung menghasilkan output dalam format yang sesuai dengan model Pydantic yang telah kita definisikan, 
+sehingga memudahkan kita untuk mengambil informasi dan menggunakannya dalam format yang sesuai keperluan kita.
+"""
+promptv20 = ChatPromptTemplate.from_messages([
     ("system", "Jelaskan tentang {topic} secara singkat"),
     ("human", "{topic}"),
-    ("ai", "Hi, saya adalah asisten AI yang akan membantu menjelaskan tentang {topic}. {input} {format_instructions}"),
+    ("ai", "Hi, saya adalah asisten AI yang akan membantu menjelaskan tentang {topic}. {input}"),
     ("human","{input}"),
-]).partial(format_instructions=parserv10.get_format_instructions())
+])
 
-structured_chain = promptv10 | llm | parserv10
-result = structured_chain.invoke({"topic": "Artificial Intelligence", "input": "jelaskan dengan Bahasa yang Sederhana"})
+# promptv30 = ChatPromptTemplate.from_messages([
+#     ("system", "jawab pertanyaan matematika berikut {topic} secara singkat tanpa perlu penjelasan, langsung jawab saja"),
+#     ("human", "{topic}"),
+#     ("ai", "{topic}"),
+#     # ("human","{input}"),
+# ])
+
+structured_llm = llm.with_structured_output(Explanation)
+chain = promptv20 | structured_llm
+
+result = chain.invoke({"topic": "Artificial Intelligence", "input": "jelaskan dengan Bahasa yang Sederhana"})
+
+filename = "output.json"
+
+try:
+    with open(filename, "r") as f:
+        data = json.load(f)
+    if not isinstance(data, list):
+        data = [data]
+except (FileNotFoundError, json.JSONDecodeError):
+    data = []
+
+data.append(result.model_dump())  
+
+with open(filename, "w") as f:
+    json.dump(data, f, indent=4)
+
+print(f"Hasil telah disimpan ke {filename}")
 print(result.jawaban)
 print(type(result.jawaban))
+
+
+# chain = promptv30 | structured_llm
+
+# result2 = chain.invoke({"topic": "1+1"})
+
+# print(result2.jawaban)
+# print(type(result2.jawaban))
