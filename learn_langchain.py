@@ -3,7 +3,7 @@ from tempfile import template
 from langchain_core.prompts import PromptTemplate
 """
 Template prompt terdiri dari template string. Template ini menerima serangkaian parameter dari pengguna yang dapat 
-digunakan untuk menghasilkan prompt untuk model bahasa.
+digunakan untuk menghasilkan prompt untuk model.
 
 "non-message prompt" adalah jenis template prompt yang tidak memiliki struktur pesan tertentu, tetapi hanya terdiri dari string template yang dapat diisi dengan parameter.
 'input_variables'
@@ -48,8 +48,8 @@ print("="*100)
 """
 from message prompt
 "message prompt" adalah jenis template prompt yang memiliki struktur pesan tertentu, biasanya terdiri dari beberapa bagian seperti "system", "user", dan "assistant". 
-Struktur ini digunakan untuk mensimulasikan percakapan antara pengguna dan model bahasa, di mana setiap bagian memiliki peran tertentu dalam konteks percakapan.Dalam contoh pertama, kita membuat template prompt dengan struktur pesan yang terdiri dari bagian "system" dan "user". Bagian "system" memberikan
-instruksi kepada model bahasa untuk menjelaskan tentang topik tertentu secara singkat, sementara bagian "user" 
+Struktur ini digunakan untuk mensimulasikan percakapan antara pengguna dan model, di mana setiap bagian memiliki peran tertentu dalam konteks percakapan.Dalam contoh pertama, kita membuat template prompt dengan struktur pesan yang terdiri dari bagian "system" dan "user". Bagian "system" memberikan
+instruksi kepada model untuk menjelaskan tentang topik tertentu secara singkat, sementara bagian "user" 
 memberikan nilai untuk parameter "topic". Ketika kita memanggil metode invoke dengan memberikan nilai untuk parameter "topic", template akan menghasilkan prompt yang sesuai dengan format yang telah ditentukan.
 """
 
@@ -77,9 +77,9 @@ print("="*100)
 
 
 """
-output parser adalah alat yang digunakan untuk memproses dan menginterpretasikan output yang dihasilkan oleh model bahasa.
-Output parser dapat digunakan untuk mengambil informasi tertentu dari output model bahasa, seperti entitas, nilai, atau struktur data tertentu. 
-Output parser dapat membantu dalam mengorganisir dan memahami hasil yang dihasilkan oleh model bahasa, 
+output parser adalah alat yang digunakan untuk memproses dan menginterpretasikan output yang dihasilkan oleh model.
+Output parser dapat digunakan untuk mengambil informasi tertentu dari output model, seperti entitas, nilai, atau struktur data tertentu. 
+Output parser dapat membantu dalam mengorganisir dan memahami hasil yang dihasilkan oleh model, 
 sehingga memudahkan pengguna untuk mengambil informasi yang relevan dan berguna dari output tersebut.
 Artinya parser membuat output AI bisa dipakai untuk keperluan lain, misalnya untuk membuat tabel, grafik, atau format 
 data tertentu yang dapat digunakan dalam aplikasi atau analisis lebih lanjut.
@@ -87,9 +87,9 @@ data tertentu yang dapat digunakan dalam aplikasi atau analisis lebih lanjut.
 """
 
 """
-Dalam contoh ini, kita menggunakan JsonOutputParser untuk memproses output yang dihasilkan oleh model bahasa. JsonOutputParser akan mencoba untuk menginterpretasikan output sebagai format JSON, sehingga kita dapat dengan mudah mengambil
-informasi yang relevan dari output tersebut. Dalam contoh ini, kita menggunakan JsonOutputParser untuk mengambil jawaban yang dihasilkan oleh model bahasa dan menyimpannya dalam format JSON. Kita juga menggunakan ChatPromptTemplate 
-untuk membuat template prompt yang akan digunakan untuk menghasilkan output dari model bahasa.
+Dalam contoh ini, kita menggunakan JsonOutputParser untuk memproses output yang dihasilkan oleh model. JsonOutputParser akan mencoba untuk menginterpretasikan output sebagai format JSON, sehingga kita dapat dengan mudah mengambil
+informasi yang relevan dari output tersebut. Dalam contoh ini, kita menggunakan JsonOutputParser untuk mengambil jawaban yang dihasilkan oleh model dan menyimpannya dalam format JSON. Kita juga menggunakan ChatPromptTemplate 
+untuk membuat template prompt yang akan digunakan untuk menghasilkan output dari model.
 """
 
 
@@ -136,11 +136,14 @@ llm = ChatOpenAI(
 print("="*100)
 
 """
-sructured output parser adalah jenis output parser yang dirancang untuk menghasilkan output yang tersesrutuk dan fleksibel (Structured output allows agents to return data in a specific, predictable format. This is useful for parsing the output of an agent and using it in a structured way, such as for filling out a form, creating a table, or generating code.) Structured output parser memungkinkan kita untuk menghasilkan output yang terstruktur dan fleksibel, sehingga kita dapat dengan mudah mengambil informasi yang relevan dari output
+sructured output parser adalah jenis output parser yang dirancang untuk menghasilkan output yang tersesrutuk dan fleksibel (Structured output allows agents to 
+return data in a specific, predictable format. This is useful for parsing the output of an agent and using it in a structured way, such as for filling out a form, 
+creating a table, or generating code.) Structured output parser memungkinkan kita untuk menghasilkan output yang terstruktur dan fleksibel, 
+sehingga kita dapat dengan mudah mengambil informasi yang relevan dari output
 tersebut dan menggunakannya dalam format yang sesuai untuk keperluan lain.Dalam contoh ini, kita menggunakan 
-PydanticOutputParser untuk memproses output yang dihasilkan oleh model bahasa. PydanticOutputParser memungkinkan 
-kita untuk mendefinisikan model Pydantic yang sesuai dengan struktur data yang kita harapkan dari output model bahasa. 
-Dengan menggunakan PydanticOutputParser, kita dapat dengan mudah mengambil informasi yang relevan dari output model bahasa dan menyimpannya dalam format yang sesuai untuk keperluan lain.
+PydanticOutputParser untuk memproses output yang dihasilkan oleh model. PydanticOutputParser memungkinkan 
+kita untuk mendefinisikan model Pydantic yang sesuai dengan struktur data yang kita harapkan dari output model. 
+Dengan menggunakan PydanticOutputParser, kita dapat dengan mudah mengambil informasi yang relevan dari output model dan menyimpannya dalam format yang sesuai untuk keperluan lain.
 """
 
 from pydantic import BaseModel
