@@ -152,7 +152,7 @@ from typing import Any
 
 
 class Explanation(BaseModel):
-    jawaban: any
+    jawaban: Any
 # parserv10 = PydanticOutputParser(pydantic_object=Explanation)
 # promptv10 = ChatPromptTemplate.from_messages([
 #     ("system", "Jelaskan tentang {topic} secara singkat"),
